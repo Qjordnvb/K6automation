@@ -1,0 +1,16 @@
+# /grafana_provisioning/dashboard-provider.yaml
+# Este archivo configura CÓMO Grafana encontrará los dashboards.
+# Deberá ser copiado a /etc/grafana/provisioning/dashboards/ en la máquina destino.
+apiVersion: 1
+
+providers:
+- name: 'k6-dashboards'             # Nombre del proveedor (puedes cambiarlo si quieres)
+  orgId: 1                        # ID de la Organización (usualmente 1)
+  folder: 'k6 Tests'              # Nombre de la carpeta donde aparecerá el dashboard en Grafana UI
+  type: file                      # Tipo: leer archivos
+  disableDeletion: false          # Permite borrar dashboards desde la UI si se quitan del archivo JSON
+  editable: true                  # Permite editar los dashboards desde la UI (cambios se pierden si Grafana recarga el JSON)
+  options:
+    # Ruta DENTRO DEL SISTEMA donde Grafana buscará los archivos JSON de los dashboards
+    path: /etc/grafana/provisioning/dashboards
+    # Grafana buscará archivos .json en esta carpeta del sistema.

@@ -1,0 +1,641 @@
+{
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.0.0"
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": "k6",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": "k6",
+          "groupBy": [],
+          "measurement": "vus",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT max(\"value\") FROM \"vus\" WHERE $timeFilter",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "max",
+                "params": []
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Usuarios Concurrentes (Pico)",
+      "type": "stat"
+    },
+    {
+      "datasource": "k6",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+           "datasource": "k6",
+           "groupBy": [
+             {
+               "type": "time",
+               "params": [
+                 "1s"
+                ]
+              }
+           ],
+          "measurement": "http_reqs",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT count(\"value\") FROM \"http_reqs\" WHERE $timeFilter GROUP BY time(1s)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+             [
+                {
+                  "type": "field",
+                  "params": [
+                    "value"
+                   ]
+                 },
+                {
+                  "type": "count",
+                  "params": []
+                 }
+              ]
+           ],
+          "tags": []
+         }
+      ],
+      "title": "Peticiones por Segundo (Pico RPS)",
+      "type": "stat"
+    },
+     {
+      "datasource": "k6",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 80
+              },
+              {
+                "color": "green",
+                "value": 95
+              }
+            ]
+          },
+          "unit": "percent",
+           "min": 0,
+           "max": 100
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+         "reduceOptions": {
+           "calcs": [
+             "lastNotNull"
+            ],
+           "fields": "",
+           "values": false
+          },
+         "showThresholdLabels": false,
+         "showThresholdMarkers": true,
+         "text": {},
+         "orientation": "auto"
+        },
+      "pluginVersion": "9.0.0",
+      "targets": [
+         {
+           "datasource": "k6",
+           "groupBy": [],
+           "measurement": "flow_success_rate",
+           "orderByTime": "ASC",
+           "policy": "default",
+           "query": "SELECT last(\"rate\")*100 FROM \"flow_success_rate\" WHERE $timeFilter",
+           "rawQuery": false,
+           "refId": "A",
+           "resultFormat": "time_series",
+           "select": [
+              [
+                 {
+                   "type": "field",
+                   "params": [
+                     "rate"
+                    ]
+                  },
+                 {
+                   "type": "last",
+                   "params": []
+                  },
+                  {
+                    "type": "math",
+                    "params": [
+                      "*100"
+                    ]
+                  }
+               ]
+            ],
+           "tags": []
+          }
+       ],
+      "title": "Éxito Flujo Completo (%)",
+      "type": "gauge"
+     },
+    {
+      "datasource": "k6",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 5000
+              },
+              {
+                "color": "red",
+                "value": 15000
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 0,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": "k6",
+          "groupBy": [],
+          "measurement": "http_req_duration",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT percentile(\"value\", 95) FROM \"http_req_duration\" WHERE $timeFilter",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "type": "field",
+                "params": [
+                  "value"
+                ]
+              },
+              {
+                "type": "percentile",
+                "params": [
+                  "95"
+                ]
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Tiempo Respuesta General (p95)",
+      "type": "stat"
+    },
+     {
+      "datasource": "k6",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+               {
+                 "color": "green",
+                 "value": null
+                },
+               {
+                 "color": "orange",
+                 "value": 5
+                },
+               {
+                 "color": "red",
+                 "value": 10
+                }
+             ]
+           },
+           "unit": "percent",
+           "min": 0,
+           "max": 100
+         },
+        "overrides": []
+       },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 4,
+        "y": 8
+       },
+      "id": 5,
+      "options": {
+         "reduceOptions": {
+           "calcs": [
+             "lastNotNull"
+            ],
+           "fields": "",
+           "values": false
+          },
+         "showThresholdLabels": false,
+         "showThresholdMarkers": true,
+         "text": {},
+         "orientation": "auto"
+        },
+      "pluginVersion": "9.0.0",
+      "targets": [
+         {
+           "datasource": "k6",
+           "groupBy": [],
+           "measurement": "http_req_failed",
+           "orderByTime": "ASC",
+           "policy": "default",
+           "query": "SELECT last(\"rate\")*100 FROM \"http_req_failed\" WHERE $timeFilter",
+           "rawQuery": false,
+           "refId": "A",
+           "resultFormat": "time_series",
+           "select": [
+              [
+                 {
+                   "type": "field",
+                   "params": [
+                     "rate"
+                    ]
+                  },
+                 {
+                   "type": "last",
+                   "params": []
+                  },
+                 {
+                   "type": "math",
+                   "params": [
+                     "*100"
+                    ]
+                  }
+               ]
+            ],
+           "tags": []
+          }
+       ],
+      "title": "Tasa Error HTTP (%)",
+      "type": "gauge"
+     },
+      {
+      "datasource": "k6",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+           "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "p95",
+          "datasource": "k6",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "http_req_duration",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT percentile(\"value\", 95) FROM \"http_req_duration\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "95"
+                ],
+                "type": "percentile"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "median",
+           "datasource": "k6",
+          "groupBy": [
+             {
+               "params": [
+                 "$__interval"
+                ],
+               "type": "time"
+              },
+             {
+               "params": [
+                 "null"
+                ],
+               "type": "fill"
+              }
+           ],
+           "hide": false,
+           "measurement": "http_req_duration",
+           "orderByTime": "ASC",
+           "policy": "default",
+           "query": "SELECT median(\"value\") FROM \"http_req_duration\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+           "rawQuery": false,
+           "refId": "B",
+           "resultFormat": "time_series",
+           "select": [
+              [
+                 {
+                   "params": [
+                     "value"
+                    ],
+                   "type": "field"
+                  },
+                 {
+                   "params": [],
+                   "type": "median"
+                  }
+               ]
+            ],
+           "tags": []
+          }
+      ],
+      "title": "Tiempo Respuesta General (ms)",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": ["k6", "summary"],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "k6 Summary Dashboard",
+  "uid": "k6-summary-auto",
+  "version": 2,
+  "weekStart": ""
+}
